@@ -1,16 +1,16 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-
-let productSchema = new Schema({
+let userSchema = new Schema({
     id: {
         type: String,
         required: true
+
     },
-    name: {
+    username: {
         type: String,
         required: true
     },
-    description: {
+    password: {
         type: String,
         required: true
     },
@@ -22,22 +22,18 @@ let productSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    cuantity: {
-        type: Number,
+    email: {
+        type: String,
         required: true
     },
-    price: {
-        type: Number,
+    role: {
+        type: Array,
         required: true
     },
     image: {
         type: String,
         required: true
-    },
-    category: {
-        type: String,
-        required: true
     }
 });
 
-export default model('Product', productSchema);
+export default model("User", userSchema);

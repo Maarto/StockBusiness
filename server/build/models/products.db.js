@@ -1,7 +1,7 @@
-import { Schema, model } from 'mongoose';
-
-
-let productSchema = new Schema({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = require("mongoose");
+let productSchema = new mongoose_1.Schema({
     id: {
         type: String,
         required: true
@@ -39,5 +39,4 @@ let productSchema = new Schema({
         required: true
     }
 });
-
-export default model('Product', productSchema);
+exports.default = (0, mongoose_1.model)('Product', productSchema);

@@ -1,0 +1,11 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+    background-color: #000000;
+}
+
+.login__form {
+    color: white;
+}
