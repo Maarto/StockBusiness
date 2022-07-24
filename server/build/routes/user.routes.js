@@ -4,6 +4,7 @@ const express_1 = require("express");
 const user_controllers_1 = require("../controllers/user.controllers");
 let router = (0, express_1.Router)();
 router.get("/user/:id", user_controllers_1.getUser);
+router.post("/auth/login", user_controllers_1.validateUser);
 router.post("/user", user_controllers_1.postUser);
 router.put("/user/:id", user_controllers_1.putUser);
 router.delete("/user/:id", user_controllers_1.deleteUser);

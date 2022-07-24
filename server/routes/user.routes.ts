@@ -1,9 +1,10 @@
 import { Router } from 'express';
-import { putUser, deleteUser,getUser,postUser } from '../controllers/user.controllers';
+import { putUser, deleteUser,getUser,postUser, validateUser } from '../controllers/user.controllers';
 
 let router = Router();
 
 router.get("/user/:id", getUser);
+router.post("/auth/login", validateUser);
 
 router.post("/user", postUser);
 

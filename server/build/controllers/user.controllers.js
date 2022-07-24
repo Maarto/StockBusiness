@@ -12,10 +12,45 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.putUser = exports.getUser = exports.postUser = void 0;
+exports.validateUser = exports.deleteUser = exports.putUser = exports.getUser = exports.postUser = void 0;
 const users_db_1 = __importDefault(require("../models/users.db"));
 const joi_1 = __importDefault(require("@hapi/joi"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
+require("dotenv/config");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+function validateUser(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let user = yield users_db_1.default.findOne({ id: req.params.id });
+        if (!user) {
+            res.status(404).send('User not found');
+            return;
+        }
+        let isValid = yield bcrypt_1.default.compare(req.body.password, user.password);
+        if (!isValid) {
+            res.status(401).send('Invalid password');
+            return;
+        }
+        try {
+            let token = jsonwebtoken_1.default.sign({ id: user.id }, `${process.env.JWT_SECRET}`, {
+                expiresIn: '1h'
+            });
+            res.status(200).json({
+                status: 'success',
+                data: {
+                    token: token,
+                    user: user
+                }
+            });
+        }
+        catch (err) {
+            res.status(400).json({
+                status: 'error',
+                message: err
+            });
+        }
+    });
+}
+exports.validateUser = validateUser;
 function postUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         let schemaUser = joi_1.default.object({

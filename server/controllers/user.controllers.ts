@@ -2,6 +2,46 @@ import { Request, Response } from 'express';
 import db from '../models/users.db';
 import Joi from '@hapi/joi';
 import bcrypt from 'bcrypt';
+import 'dotenv/config'
+import jwt from 'jsonwebtoken';
+
+async function validateUser(req: Request, res: Response) {
+    let user = await db.findOne({ id: req.params.id });
+
+    if (!user) {
+        res.status(404).send('User not found');
+        return;
+    }
+
+    let isValid = await bcrypt.compare(req.body.password, user.password);
+
+    if (!isValid) {
+        res.status(401).send('Invalid password');
+        return;
+    }
+
+    try {
+
+        let token = jwt.sign({ id: user.id }, `${process.env.JWT_SECRET}`, {
+            expiresIn: '1h'
+        })
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                token: token,
+                user: user
+            }
+        })
+    } catch (err) {
+        res.status(400).json({
+            status: 'error',
+            message: err
+        })
+    }
+
+
+}
 
 async function postUser(req: Request, res: Response) {
 
@@ -161,4 +201,4 @@ async function deleteUser(req: Request, res: Response) {
     }
 }
 
-export { postUser, getUser, putUser, deleteUser };
+export { postUser, getUser, putUser, deleteUser, validateUser };
