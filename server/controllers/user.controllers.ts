@@ -6,7 +6,8 @@ import 'dotenv/config'
 import jwt from 'jsonwebtoken';
 
 async function validateUser(req: Request, res: Response) {
-    let user = await db.findOne({ id: req.params.id });
+
+    let user = await db.findOne({username: req.body.username});
 
     if (!user) {
         res.status(404).send('User not found');
@@ -46,14 +47,13 @@ async function validateUser(req: Request, res: Response) {
 async function postUser(req: Request, res: Response) {
 
     let schemaUser = Joi.object({
-        id: Joi.string().required(),
         username: Joi.string().min(6).max(255).required(),
         password: Joi.string().min(6).max(1024).required(),
         createdAt: Joi.date().default(Date.now),
         updatedAt: Joi.date().default(Date.now),
         email: Joi.string().min(6).max(255).required(),
         role: Joi.array().required().default(['user']),
-        image: Joi.string().min(6).max(1024).required()
+        avatar: Joi.string().min(6).max(1024).required()
     })
 
     let { error } = schemaUser.validate(req.body);
@@ -91,12 +91,11 @@ async function postUser(req: Request, res: Response) {
     const password = await bcrypt.hash(req.body.password, salt);
 
     let user = new db({
-        id: req.body.username + req.body.email,
         username: req.body.username,
         password: password,
         email: req.body.email,
         role: req.body.role,
-        image: req.body.image
+        avatar: req.body.avatar
     })
 
     try {

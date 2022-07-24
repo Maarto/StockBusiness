@@ -20,7 +20,7 @@ require("dotenv/config");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 function validateUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        let user = yield users_db_1.default.findOne({ id: req.params.id });
+        let user = yield users_db_1.default.findOne({ username: req.body.username });
         if (!user) {
             res.status(404).send('User not found');
             return;
@@ -54,14 +54,13 @@ exports.validateUser = validateUser;
 function postUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         let schemaUser = joi_1.default.object({
-            id: joi_1.default.string().required(),
             username: joi_1.default.string().min(6).max(255).required(),
             password: joi_1.default.string().min(6).max(1024).required(),
             createdAt: joi_1.default.date().default(Date.now),
             updatedAt: joi_1.default.date().default(Date.now),
             email: joi_1.default.string().min(6).max(255).required(),
             role: joi_1.default.array().required().default(['user']),
-            image: joi_1.default.string().min(6).max(1024).required()
+            avatar: joi_1.default.string().min(6).max(1024).required()
         });
         let { error } = schemaUser.validate(req.body);
         if (error) {
@@ -90,12 +89,11 @@ function postUser(req, res) {
         const salt = yield bcrypt_1.default.genSalt(10);
         const password = yield bcrypt_1.default.hash(req.body.password, salt);
         let user = new users_db_1.default({
-            id: req.body.username + req.body.email,
             username: req.body.username,
             password: password,
             email: req.body.email,
             role: req.body.role,
-            image: req.body.image
+            avatar: req.body.avatar
         });
         try {
             yield user.save();

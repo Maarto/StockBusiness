@@ -1,11 +1,6 @@
 import { Schema, model } from "mongoose";
 
 let userSchema = new Schema({
-    id: {
-        type: String,
-        required: true
-
-    },
     username: {
         type: String,
         required: true
@@ -30,10 +25,10 @@ let userSchema = new Schema({
         type: Array,
         required: true
     },
-    image: {
+    avatar: {
         type: String,
         required: true
     }
-});
+}, {versionKey: false});
 
 export default model("User", userSchema);

@@ -19,9 +19,7 @@ function LoginForm() {
             },
                 (error) => {
 
-                    console.log(error);
-
-                    if(error.response.data === 'Invalid password'){
+                    if(error){
                         setError('Usuario o Contraseña inválidas')
                     }
                 }

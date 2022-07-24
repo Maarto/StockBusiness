@@ -2,10 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 let userSchema = new mongoose_1.Schema({
-    id: {
-        type: String,
-        required: true
-    },
     username: {
         type: String,
         required: true
@@ -30,9 +26,9 @@ let userSchema = new mongoose_1.Schema({
         type: Array,
         required: true
     },
-    image: {
+    avatar: {
         type: String,
         required: true
     }
-});
+}, { versionKey: false });
 exports.default = (0, mongoose_1.model)("User", userSchema);

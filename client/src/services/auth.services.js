@@ -7,7 +7,7 @@ async function login(username, password){
     }).then(res => {
         if(res.data){
 
-            console.log(res)
+            // console.log(res)
 
             let newUserOBJ = {
                 username: res.data.data.user.username,
@@ -18,7 +18,7 @@ async function login(username, password){
 
             localStorage.setItem('user', JSON.stringify(newUserOBJ))
         }
-        console.log('auth services')
+        // console.log('auth services')
         return res;
 
     })

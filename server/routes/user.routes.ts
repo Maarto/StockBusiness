@@ -4,6 +4,7 @@ import { putUser, deleteUser,getUser,postUser, validateUser } from '../controlle
 let router = Router();
 
 router.get("/user/:id", getUser);
+
 router.post("/auth/login", validateUser);
 
 router.post("/user", postUser);

@@ -1,10 +1,15 @@
 import React from "react";
+import DashBoard__NavigateBar from "../../components/dashboard/navigation/navBar";
 
 function Homepage() {
   return (
-    <div>
-      <h1>Homepage</h1>
-    </div>
+    <>
+      <DashBoard__NavigateBar />
+
+      <div>
+        asfasfa
+      </div>
+    </>
   );
 }
 
