@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-async function login(username, password){
+async function login(email, password){
     return axios.post('http://localhost:4000/auth/login', {
-        username: username,
+        email: email,
         password: password
     }).then(res => {
         if(res.data){
@@ -10,7 +10,8 @@ async function login(username, password){
             // console.log(res)
 
             let newUserOBJ = {
-                username: res.data.data.user.username,
+                name: res.data.data.user.name,
+                surname: res.data.data.user.surname,
                 token: res.data.data.token,
                 id: res.data.data.user._id,
                 role: res.data.data.user.role
@@ -28,6 +29,12 @@ async function getUser(){
     return JSON.parse(localStorage.getItem('user'))
 }
 
+async function getUserFromDB(id) {
+    return axios.get("http://localhost:4000/user/" + id).then(res => {
+        return res.data;
+    })
+}
+
 async function logout(){
     localStorage.removeItem('user')
 }
@@ -35,7 +42,8 @@ async function logout(){
 const authServices = {
     login,
     logout,
-    getUser
+    getUser,
+    getUserFromDB
 };
 
 export default authServices;

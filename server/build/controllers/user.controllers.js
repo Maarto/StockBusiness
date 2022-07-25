@@ -20,7 +20,7 @@ require("dotenv/config");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 function validateUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        let user = yield users_db_1.default.findOne({ username: req.body.username });
+        let user = yield users_db_1.default.findOne({ email: req.body.email });
         if (!user) {
             res.status(404).send('User not found');
             return;
@@ -54,7 +54,8 @@ exports.validateUser = validateUser;
 function postUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         let schemaUser = joi_1.default.object({
-            username: joi_1.default.string().min(6).max(255).required(),
+            name: joi_1.default.string().max(255).required(),
+            surname: joi_1.default.string().max(255).required(),
             password: joi_1.default.string().min(6).max(1024).required(),
             createdAt: joi_1.default.date().default(Date.now),
             updatedAt: joi_1.default.date().default(Date.now),
@@ -78,18 +79,19 @@ function postUser(req, res) {
             });
             return;
         }
-        let isUsernameExist = yield users_db_1.default.findOne({ username: req.body.username });
-        if (isUsernameExist) {
-            res.status(400).json({
-                status: 'error',
-                message: 'Username already exist'
-            });
-            return;
-        }
+        // let isUsernameExist = await db.findOne({ username: req.body.username });
+        // if (isUsernameExist) {
+        //     res.status(400).json({
+        //         status: 'error',
+        //         message: 'Username already exist'
+        //     })
+        //     return;
+        // }
         const salt = yield bcrypt_1.default.genSalt(10);
         const password = yield bcrypt_1.default.hash(req.body.password, salt);
         let user = new users_db_1.default({
-            username: req.body.username,
+            name: req.body.name,
+            surname: req.body.surname,
             password: password,
             email: req.body.email,
             role: req.body.role,
@@ -123,7 +125,7 @@ function getUser(req, res) {
         }
         if (req.params.id) {
             try {
-                let user = yield users_db_1.default.findOne({ id: req.params.id });
+                let user = yield users_db_1.default.findOne({ _id: req.params.id });
                 if (user === null) {
                     res.status(404).send({ message: "User not found" });
                 }

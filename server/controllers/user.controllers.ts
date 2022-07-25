@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken';
 
 async function validateUser(req: Request, res: Response) {
 
-    let user = await db.findOne({username: req.body.username});
+    let user = await db.findOne({email: req.body.email});
 
     if (!user) {
         res.status(404).send('User not found');
@@ -47,7 +47,8 @@ async function validateUser(req: Request, res: Response) {
 async function postUser(req: Request, res: Response) {
 
     let schemaUser = Joi.object({
-        username: Joi.string().min(6).max(255).required(),
+        name: Joi.string().max(255).required(),
+        surname: Joi.string().max(255).required(),
         password: Joi.string().min(6).max(1024).required(),
         createdAt: Joi.date().default(Date.now),
         updatedAt: Joi.date().default(Date.now),
@@ -77,21 +78,22 @@ async function postUser(req: Request, res: Response) {
         return;
     }
 
-    let isUsernameExist = await db.findOne({ username: req.body.username });
+    // let isUsernameExist = await db.findOne({ username: req.body.username });
 
-    if (isUsernameExist) {
-        res.status(400).json({
-            status: 'error',
-            message: 'Username already exist'
-        })
-        return;
-    }
+    // if (isUsernameExist) {
+    //     res.status(400).json({
+    //         status: 'error',
+    //         message: 'Username already exist'
+    //     })
+    //     return;
+    // }
 
     const salt = await bcrypt.genSalt(10);
     const password = await bcrypt.hash(req.body.password, salt);
 
     let user = new db({
-        username: req.body.username,
+        name: req.body.name,
+        surname: req.body.surname,
         password: password,
         email: req.body.email,
         role: req.body.role,
@@ -126,7 +128,7 @@ async function getUser(req: Request, res: Response) {
 
     if (req.params.id) {
         try {
-            let user = await db.findOne({ id: req.params.id });
+            let user = await db.findOne({ _id: req.params.id });
 
             if (user === null) {
                 res.status(404).send({ message: "User not found" });

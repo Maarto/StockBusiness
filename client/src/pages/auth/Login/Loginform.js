@@ -35,8 +35,8 @@ function LoginForm() {
             <div className="login__form">
                 <h1>Dashboard</h1>
                 <form>
-                    <label>Usuario</label>
-                    <input type="text" placeholder="Username" onChange={(e) => {
+                    <label>Email</label>
+                    <input type="email" placeholder="Email" onChange={(e) => {
                         setUsername(e.target.value)
                     }} />
                     <label>Contraseña</label>

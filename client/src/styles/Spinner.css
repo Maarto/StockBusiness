@@ -1,0 +1,13 @@
+.loadingSign {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+}
+
+.loadingSign h1 {
+    margin: 0 2rem;
+    color: var(--color-dark);
+    border-bottom: 0.2rem solid #ffbb55;
+}
